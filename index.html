@@ -1,0 +1,312 @@
+<!-- NCOS 1 -->
+<!DOCTYPE HTML>
+<html>
+  <head>
+      <style>
+      body{
+          height:100vh;
+          width:100vw;
+          background:#000;
+          overflow:hidden;
+          margin:0px;
+          font-family:'ClassicConsole', monospace;
+      }    
+      .terminal {
+  --size: 1.75;
+}
+.dialog {
+         --size: 1.5;
+     }
+          </style>
+    <meta charset="utf-8" />
+    <script src="ui/js/jquery-1.7.1.min.js"></script>
+    <script src="ui/js/jquery.mousewheel-min.js"></script>
+    <script src="ui/js/jquery.terminal.js"></script>
+    <script src="ui/js/unix_formatting.js"></script>
+    <link href="ui/css/jquery.terminal.css" rel="stylesheet"/>
+    <link href="ui\ClassicConsole\styles.css" rel="stylesheet">
+    <script src="ui/examples/dialog.js"></script>
+    <link href="ui/examples/dialog.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/js-polyfills/keyboard.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+var Username = localStorage.getItem("username");
+var Hostname = localStorage.getItem("hostname");
+            jQuery(function($, undefined) {
+  $('body').terminal(function(command) {
+   
+    if (command == 'test') {
+        this.echo("The system is working properly.");
+    }
+    else if (command == 'reboot') {
+        this.echo("Rebooting");
+        history.go(0)
+    } 
+    else if (command == 'setup user -g') {
+        $('body').dialog(function(input) {
+             setTimeout(function() {
+                localStorage.setItem("username", input);
+                
+               history.go("0")
+
+
+             }, 100);
+         }, {
+             cols: 40,
+             rows: 10,
+             message: 'Username',
+             title: 'Dahlia OS Setup'
+         });  
+    } 
+    else if (command == 'setup host -g') {
+        $('body').dialog(function(input) {
+             setTimeout(function() {
+                localStorage.setItem("hostname", input);
+                
+               history.go("0")
+
+
+             }, 100);
+         }, {
+             cols: 40,
+             rows: 10,
+             message: 'Hostname',
+             title: 'Dahlia OS Setup'
+         });  
+    } 
+      
+    else if (command == 'sysinfo') {
+        if (navigator.onLine) {
+            this.echo('\x1b[42m Online \x1b[m');
+        }
+        else {
+            this.echo('\x1b[41m Offline \x1b[m');
+        }
+        this.echo('Dahlia OS'+ntosVersion)
+        this.echo(navigator.userAgent);
+        this.echo('Running on ' +navigator.platform);
+        this.echo('User ' +Username);
+                  
+                   if (Hostname == 'edgar') {
+               
+                this.echo('Device set to: Acer Chromebook 14 CB3-431');
+              
+            }
+               if (Hostname == 'kefka') {
+                this.echo('Device set to: Dell Chromebook 11 3180');
+                
+            }
+               else if (Hostname == 'calvin') {
+               
+                this.echo('Device set to: NTOS Developer Server v1');
+               
+            }
+            else{
+                 this.echo('Hostname: ' +Hostname);
+            }
+    
+       
+
+    } 
+      
+      
+      
+       else if (command == 'help') {
+        this.echo('Dahlia OS'+ntosVersion+' help')
+        this.echo('\x1b[34mreboot\x1b[m - restart the system')
+		this.echo('\x1b[34msysinfo\x1b[m - show information about your device')
+           this.echo('\x1b[34msetup user\x1b[m - configure the user profile. Add -g to enable graphic mode.')
+           this.echo('\x1b[34msetup host\x1b[m - configure the name of the computer. Add -g to enable graphic mode.')
+           this.echo('\x1b[34mreset\x1b[m - clear the computer and restore it to factory settings.')
+           this.echo('\x1b[34mtest\x1b[m - check the computer for issues.')
+           this.echo('\x1b[34mshell\x1b[m - open a javascript shell')
+           this.echo('\x1b[34mterminal -g\x1b[m - open a new terminal with graphics')
+           this.echo('\x1b[34mexit\x1b[m - close the current shell')
+           this.echo('\x1b[34mwww\x1b[m - browse the web')
+           this.echo('\x1b[34mpm start pangolin\x1b[m - Start Pangolin')
+           this.echo('\x1b[34mpm start armadillo\x1b[m - Start Armadillo')
+    } 
+      
+      
+       else if (command == 'www') {
+          
+          
+        this.read('Enter a URL:', url => {
+            window.open(url, "_blank","toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=yes, width=1000, height=600");
+         this.echo('process closed');
+      });
+          
+          
+          
+      }
+      
+      
+      else if (command == 'setup user') {
+          
+            this.read('Username:', username => {
+            if (username == 'nmcain') {
+                localStorage.setItem("username", 'nmcain');
+                this.echo('Noah Cain added as user');
+                this.echo('Username updated; type \x1b[34mreboot\x1b[m to continue');
+            }
+            else{
+                localStorage.setItem("username", username);
+                this.echo('New user '+ username +' added');
+                this.echo('Username updated; type \x1b[34mreboot\x1b[m to continue');
+            }
+                });
+          
+      }
+                      
+       else if (command == 'setup host') {
+          
+           this.read('Hostname:', hostname => {
+            if (hostname == 'edgar') {
+                localStorage.setItem("hostname", 'edgar');
+                this.echo('Device set to: Acer Chromebook 14 CB3-431');
+                this.echo('Hostname updated; type \x1b[34mreboot\x1b[m to continue');
+            }
+               else if (hostname == 'kefka') {
+                localStorage.setItem("hostname", 'kefka');
+                this.echo('Device set to: Dell Chromebook 11 3180');
+                this.echo('Hostname updated; type \x1b[34mreboot\x1b[m to continue');
+            }
+               else if (hostname == 'calvin') {
+                localStorage.setItem("hostname", 'calvin');
+                this.echo('Device set to: Dahlia OS Developer Server v1');
+                this.echo('Hostname updated; type \x1b[34mreboot\x1b[m to continue');
+            }
+            else{
+                localStorage.setItem("hostname", hostname);
+                this.echo('New host '+ hostname +' added');
+                this.echo('Hostname changed; type \x1b[34mreboot\x1b[m to continue');
+            }
+                });
+          
+      }
+      
+      
+      
+      else if (command == 'reset') {
+          
+          
+        this.read('\x1b[31mWARNING:THIS PROCESS CAN NOT BE UNDONE!\x1b[m Are you sure you want to clear local data? Y/n:', confirmation => {
+            if (confirmation == 'Y') {
+                localStorage.clear();
+                this.echo('Storage cleared; type \x1b[34mreboot\x1b[m to continue');
+            }
+            else{
+                this.echo('Process cancelled');
+            }
+         //this.echo('process closed');
+      });
+          
+          
+          
+      }
+
+      
+      
+      
+      
+      
+      
+      
+      
+       else if (command == 'shell') {
+           var block = document.querySelector("body > div:nth-child(1)");
+          block.style.display = "none"    
+          jQuery(function($, undefined) {
+  $('body').terminal(function(command) {
+      if (command !== '') {
+          var result = window.eval(command);
+          if (result != undefined) {
+              this.echo(String(result));
+          }
+      }
+  }, {
+      greetings: 'Dahlia OS JavaScript Interpreter \nType \x1b[34mexit()\x1b[m to leave.',
+      name: 'ntos',
+      prompt: '\x1b[36mjs>>>\x1b[m'
+  });
+});
+         
+        
+         }
+     else if (command == 'terminal -g') {window.open("#","_blank","toolbar=no, location=yes, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=yes, width=1000, height=600");}
+      
+      
+      else if (command == 'exit') {window.close();}
+    
+      
+      else if (command == 'pm start pangolin') {
+          
+          
+          this.read('\x1b[31mWARNING: STARTING A DESKTOP SHELL IS POTENTIALLY SLOW ON SOME DEVICES!\x1b[m Are you sure you want to continue? Y/n:', confirmation => {
+              if (confirmation == 'Y') {
+               
+                  this.echo('STARTING PANGOLIN BOOT SEQUENCE...');
+                  
+                  
+                  window.location = 'pangolin/index.html';
+
+              }
+              else{
+                  this.echo('Process cancelled');
+              }
+           //this.echo('process closed');
+      //sleep(100);
+      
+        });
+            
+            
+            
+        }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    else {
+        this.echo('\x1b[31mUnknown command\x1b[m');
+    }
+}, { prompt: Username+'@'+Hostname+'>', name: 'ntos' });
+});
+function start(){
+    this.echo("null");
+}
+        
+        
+        
+        
+     function exit(){
+          history.go("0");
+      }      
+        
+                </script>
+</head>
+
+<body>   
+</body>

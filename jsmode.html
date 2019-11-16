@@ -1,0 +1,41 @@
+<!-- NCOS 1 -->
+<!DOCTYPE HTML>
+<html>
+  <head>
+      <style>
+      body{
+          height:100vh;
+          width:100vw;
+          background:#333;
+      }    
+          </style>
+    <meta charset="utf-8" />
+    <script src="../js/jquery-1.7.1.min.js"></script>
+    <script src="../js/jquery.mousewheel-min.js"></script>
+    <script src="../js/jquery.terminal.min.js"></script>
+    <link href="../css/jquery.terminal.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/js-polyfills/keyboard.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+            jQuery(function($, undefined) {
+  $('body').terminal(function(command) {
+      if (command !== '') {
+          var result = window.eval(command);
+          if (result != undefined) {
+              this.echo(String(result));
+          }
+      }
+  }, {
+      greetings: 'NTOS v1.0 PRE-ALPHA',
+      name: 'ntos',
+      prompt: 'js> '
+  });
+});
+function start(){
+    alert("start")
+}
+                </script>
+</head>
+
+<body>            
+</body>
